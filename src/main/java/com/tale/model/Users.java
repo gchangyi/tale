@@ -10,6 +10,12 @@ public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+	/** 后台管理的用户组  */
+	public static final String ADMIN = "administrator";
+	/** 通过网站组成成功的用户组,没有登录到后台的权限  */
+	public static final String VISITOR = "visitor";
+	public static final String WEBUSER = "webuser";
+    
     // user表主键
     private Integer uid;
 

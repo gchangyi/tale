@@ -26,12 +26,13 @@ public final class TaleJdbc {
     private static final Properties jdbc_prop = new Properties();
 
     public static JdbcConf jdbcConf;
+    
+    public static String DB_TYPE = "sqlite";
 
     private TaleJdbc() {
     }
 
     static {
-        jdbc_prop.put("driverClassName", "com.mysql.jdbc.Driver");
         jdbc_prop.put("initialSize", "5");
         jdbc_prop.put("maxActive", "10");
         jdbc_prop.put("minIdle", "3");
@@ -40,7 +41,6 @@ public final class TaleJdbc {
         jdbc_prop.put("removeAbandonedTimeout", "180");
         jdbc_prop.put("timeBetweenEvictionRunsMillis", "60000");
         jdbc_prop.put("minEvictableIdleTimeMillis", "300000");
-        jdbc_prop.put("validationQuery", "SELECT 1 FROM DUAL");
         jdbc_prop.put("testWhileIdle", "true");
         jdbc_prop.put("testOnBorrow", "false");
         jdbc_prop.put("testOnReturn", "false");
@@ -52,16 +52,24 @@ public final class TaleJdbc {
         Properties props = new Properties();
         try {
             props.load(in);
-            String db_host = props.get("db_host").toString();
-            String db_name = props.get("db_name").toString();
-            if (!isNull(db_host) && !isNull(db_name)) {
-                String username = props.get("db_user").toString();
-                String password = props.get("db_pass").toString();
-                String url = "jdbc:mysql://" + db_host + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull";
-                put("url", url);
-                put("username", username);
-                put("password", password);
-                jdbcConf = new JdbcConf(db_host, db_name, username, password);
+            String db_type = props.get("db_type").toString();
+            if(!isNull(db_type)) {
+            	DB_TYPE = db_type;
+            }
+            if("mysql".equalsIgnoreCase(DB_TYPE)) {
+            	jdbc_prop.put("validationQuery", "SELECT 1 FROM DUAL");
+            	jdbc_prop.put("driverClassName", "com.mysql.jdbc.Driver");
+	            String db_host = props.get("db_host").toString();
+	            String db_name = props.get("db_name").toString();
+	            if (!isNull(db_host) && !isNull(db_name)) {
+	                String username = props.get("db_user").toString();
+	                String password = props.get("db_pass").toString();
+	                String url = "jdbc:mysql://" + db_host + "/" + db_name + "?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull";
+	                put("url", url);
+	                put("username", username);
+	                put("password", password);
+	                jdbcConf = new JdbcConf(db_host, db_name, username, password);
+	            }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,7 +2,6 @@ package com.tale.ext;
 
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.StringKit;
-import com.tale.controller.BaseController;
 import com.tale.dto.Comment;
 import com.tale.dto.MetaDto;
 import com.tale.dto.Types;
@@ -360,7 +359,7 @@ public final class Theme {
      *
      * @return
      */
-    public static List<MetaDto> categries(int limit) {
+    public static List<MetaDto> categories(int limit) {
         if (null == siteService) {
             return EMPTY;
         }
@@ -372,7 +371,7 @@ public final class Theme {
      * @param limit
      * @return
      */
-    public static List<MetaDto> rand_categries(int limit) {
+    public static List<MetaDto> rand_categories(int limit) {
         if (null == siteService) {
             return EMPTY;
         }
@@ -384,8 +383,8 @@ public final class Theme {
      *
      * @return
      */
-    public static List<MetaDto> categries() {
-        return categries(TaleConst.MAX_POSTS);
+    public static List<MetaDto> categories() {
+        return categories(TaleConst.MAX_POSTS);
     }
 
     /**

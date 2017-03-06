@@ -52,5 +52,6 @@ public class TaleConst {
      * 要过滤的ip列表
      */
     public static final Set<String> BLOCK_IPS = new HashSet<>(16);
+    
 
 }

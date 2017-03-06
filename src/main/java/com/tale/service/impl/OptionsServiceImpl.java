@@ -3,6 +3,7 @@ package com.tale.service.impl;
 import com.blade.ioc.annotation.Inject;
 import com.blade.ioc.annotation.Service;
 import com.blade.jdbc.ActiveRecord;
+import com.blade.jdbc.core.Take;
 import com.blade.kit.StringKit;
 import com.tale.model.Options;
 import com.tale.service.OptionsService;
@@ -49,4 +50,12 @@ public class OptionsServiceImpl implements OptionsService {
         }
         return options;
     }
+    
+ 
+     @Override
+     public void deleteOption(String key) {
+         if(StringKit.isNotBlank(key)){
+             activeRecord.delete(new Take(Options.class).like("name", key + "%"));
+         }
+     }
 }

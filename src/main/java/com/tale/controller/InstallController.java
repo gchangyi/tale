@@ -58,6 +58,7 @@ public class InstallController extends BaseController {
                 request.attribute("is_install", true);
             }
         } else {
+        	request.attribute("is_sqlite", "sqlite".equalsIgnoreCase(TaleJdbc.DB_TYPE));
             request.attribute("is_install", false);
         }
         return "install";
@@ -104,6 +105,7 @@ public class InstallController extends BaseController {
             users.setUsername(admin_user);
             users.setPassword(admin_pwd);
             users.setEmail(admin_email);
+            users.setGroup_name(Users.ADMIN);
 
             JdbcConf jdbcConf = new JdbcConf(db_host, db_name, db_user, db_pass);
 
