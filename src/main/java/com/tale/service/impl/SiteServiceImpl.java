@@ -65,6 +65,7 @@ public class SiteServiceImpl implements SiteService {
 
             FileOutputStream fos = new FileOutputStream(cp + "jdbc.properties");
 
+            props.setProperty("db_type", TaleJdbc.DB_TYPE);
             props.setProperty("db_host", jdbcConf.getDb_host());
             props.setProperty("db_name", jdbcConf.getDb_name());
             props.setProperty("db_user", jdbcConf.getDb_user());
