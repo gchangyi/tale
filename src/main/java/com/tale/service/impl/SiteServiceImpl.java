@@ -148,7 +148,10 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public List<Archive> getArchives() {
-        String sql = "select strftime('%Y年%m月', datetime(created, 'unixepoch')) as date_str, count(*) as count from t_contents where type = 'post' and status = 'publish' group by date_str order by date_str desc";
+        String sql = "select FROM_UNIXTIME(created, '%Y年%m月') as date_str, count(*) as count from t_contents where type = 'post' and status = 'publish' group by date_str order by date_str desc";
+        if("sqlite".equalsIgnoreCase(TaleJdbc.DB_TYPE)) {
+        	sql = "select strftime('%Y年%m月', datetime(created, 'unixepoch')) as date_str, count(*) as count from t_contents where type = 'post' and status = 'publish' group by date_str order by date_str desc";
+        }
         List<Archive> archives = activeRecord.list(Archive.class, sql);
         
         if (null != archives) {
