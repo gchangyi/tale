@@ -287,6 +287,9 @@ public final class Theme {
         if (null == contents) {
             return "";
         }
+        if(StringKit.isNotBlank(contents.getThumb_img())){
+            return contents.getThumb_img();
+        }
         String content = article(contents.getContent());
         String img = Commons.show_thumb(content);
         if (StringKit.isNotBlank(img)) {
@@ -558,4 +561,13 @@ public final class Theme {
         return contents.getComments_num() > 0 ? String.format(value, contents.getComments_num()) : noComment;
     }
 
+    /**
+     * 返回主题设置选项
+     *
+     * @param key
+     * @return
+     */
+    public static String theme_option(String key){
+        return TaleConst.OPTIONS.get("theme_option_" + key);
+    }
 }
