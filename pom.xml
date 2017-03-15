@@ -121,14 +121,15 @@
                         <directory>src/main/java</directory>
                         <filtering>false</filtering>
                     </resource>
-                    <!-- 把放在根目录下的脚本文件.sh,.bat拷贝到bin目录中 -->
+                    <!-- 把放在bin目录下的脚本文件.sh,.bat拷贝到生产环境的根目录中 -->
                     <resource>
-                        <directory>.</directory>
+                        <directory>bin</directory>
                         <includes>
                             <include>**/*.sh</include>
                             <include>**/*.bat</include>
                         </includes>
-                        <targetPath>${project.build.directory}/bin</targetPath>
+                       <!--  <targetPath>${project.build.directory}/bin</targetPath> -->
+                        <targetPath>${project.build.directory}/dist/${project.artifactId}</targetPath>
                     </resource>
                 </resources>
             </build>

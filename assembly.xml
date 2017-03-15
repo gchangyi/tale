@@ -18,10 +18,10 @@
             <directory>src/main/plugins/</directory>
             <outputDirectory>/plugins</outputDirectory>
         </fileSet>
-        <fileSet>
+        <!-- <fileSet>
             <directory>bin/</directory>
             <outputDirectory>/bin</outputDirectory>
-        </fileSet>
+        </fileSet> -->
     </fileSets>
 
     <dependencySets>
