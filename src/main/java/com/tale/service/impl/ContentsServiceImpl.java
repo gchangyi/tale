@@ -51,7 +51,7 @@ public class ContentsServiceImpl implements ContentsService {
     }
 
     @Override
-    public void publish(Contents contents) {
+    public Integer publish(Contents contents) {
         if (null == contents)
             throw new TipException("文章对象为空");
         if (StringKit.isBlank(contents.getTitle()))
@@ -89,6 +89,8 @@ public class ContentsServiceImpl implements ContentsService {
 
         metasService.saveMetas(cid, tags, Types.TAG);
         metasService.saveMetas(cid, categories, Types.CATEGORY);
+        
+        return cid;
     }
 
     @Override
@@ -120,8 +122,10 @@ public class ContentsServiceImpl implements ContentsService {
 
         activeRecord.update(contents);
 
-        String sql = "delete from t_relationships where cid = ?";
-        activeRecord.execute(sql, cid);
+        if (!StringKit.equals(contents.getType(), Types.PAGE)) {
+        	String sql = "delete from t_relationships where cid = ?";
+        	activeRecord.execute(sql, cid);
+        }
 
         metasService.saveMetas(cid, contents.getTags(), Types.TAG);
         metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY);

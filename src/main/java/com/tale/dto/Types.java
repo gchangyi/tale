@@ -25,6 +25,8 @@ public interface Types {
 
     String C_STATISTICS = "sys:statistics";
 
+    String C_ARTICLE_HITS = "article:hits";
+
     String NEXT = "next";
     String PREV = "prev";
 

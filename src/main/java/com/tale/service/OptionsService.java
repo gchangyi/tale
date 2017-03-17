@@ -23,6 +23,13 @@ public interface OptionsService {
      * @return
      */
     Map<String, String> getOptions();
+    
+    /**
+     * 根据key前缀查找配置项
+     * @param key
+     * @return
+     */
+    Map<String, String> getOptions(String key);
 
 	/**
 	 * 根据key删除配置项

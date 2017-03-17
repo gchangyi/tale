@@ -13,6 +13,8 @@ public interface LogActions {
 
     String UP_INFO = "修改个人信息";
 
+    String DEL_ATTACH = "删除附件";
+    
     String DEL_ARTICLE = "删除文章";
 
     String DEL_PAGE = "删除页面";
@@ -20,6 +22,8 @@ public interface LogActions {
     String SYS_BACKUP = "系统备份";
 
     String SYS_SETTING = "保存系统设置";
+    
+    String THEME_SETTING = "主题设置";
 
     String INIT_SITE = "初始化站点";
     

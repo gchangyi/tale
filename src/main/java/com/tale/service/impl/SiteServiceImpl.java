@@ -232,7 +232,7 @@ public class SiteServiceImpl implements SiteService {
 				String sqlFileName = "tale_" + DateKit.dateFormat(new Date(), fmt) + "_" + StringKit.getRandomNumber(5) + ".sql";
 				String zipFile = sqlFileName.replace(".sql", ".zip");
 				
-				Backup backup = new Backup(activeRecord.getSql2o().getDataSource().getConnection());
+				Backup backup = new Backup(activeRecord.sql2o().getDataSource().getConnection());
 				String sqlContent = backup.execute();
 				
 				File sqlFile = new File(bkAttachDir + sqlFileName);

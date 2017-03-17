@@ -64,6 +64,7 @@ CREATE TABLE `t_contents` (
   `allow_comment` tinyint(1) DEFAULT '1' COMMENT '是否允许评论',
   `allow_ping` tinyint(1) DEFAULT '1' COMMENT '是否允许ping',
   `allow_feed` tinyint(1) DEFAULT '1' COMMENT '允许出现在聚合中',
+  thumb_img VARCHAR(255) COMMENT '文章缩略图', fmt_type VARCHAR (16) DEFAULT 'markdown' COMMENT '编辑器类型',
   PRIMARY KEY (`cid`),
   UNIQUE KEY `slug` (`slug`),
   KEY `created` (`created`)

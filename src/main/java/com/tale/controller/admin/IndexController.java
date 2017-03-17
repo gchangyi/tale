@@ -1,5 +1,6 @@
 package com.tale.controller.admin;
 
+import com.blade.Blade;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.StringKit;
 import com.blade.kit.Tools;
@@ -28,14 +29,11 @@ import com.tale.service.LogService;
 import com.tale.service.OptionsService;
 import com.tale.service.SiteService;
 import com.tale.service.UsersService;
-
 import jetbrick.util.ShellUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -87,16 +85,6 @@ public class IndexController extends BaseController {
     public String setting(Request request) {
         Map<String, String> options = optionsService.getOptions();
         request.attribute("options", options);
-        // 读取主题
-        String themesDir = AttachController.CLASSPATH + "templates/themes";
-        File[] themesFile = new File(themesDir).listFiles();
-        List<String> themems = new ArrayList<>(themesFile.length);
-        for(File f : themesFile){
-            if(f.isDirectory()){
-                themems.add(f.getName());
-            }
-        }
-        request.attribute("themes", themems);
         return "admin/setting";
     }
 
@@ -114,9 +102,6 @@ public class IndexController extends BaseController {
             config.addAll(optionsService.getOptions());
             TaleConst.OPTIONS = config;
 
-            if (StringKit.isNotBlank(site_theme)) {
-                BaseController.THEME = "themes/" + site_theme;
-            }
             logService.save(LogActions.SYS_SETTING, JSONKit.toJSONString(querys), request.address(), this.getUid());
             return RestResponse.ok();
         } catch (Exception e) {
@@ -204,6 +189,7 @@ public class IndexController extends BaseController {
         if (StringKit.isBlank(bk_type)) {
             return RestResponse.fail("请确认信息输入完整");
         }
+
         try {
             BackResponse backResponse = siteService.backup(bk_type, bk_path, "yyyyMMddHHmm");
             logService.save(LogActions.SYS_BACKUP, null, request.address(), this.getUid());
@@ -220,23 +206,14 @@ public class IndexController extends BaseController {
     }
 
     /**
-     * 后台高级选项页面
-     *
-     * @return
-     */
-    @Route(value = "advanced", method = HttpMethod.GET)
-    public String advanced(Request request){
-        Map<String, String> options = optionsService.getOptions();
-        request.attribute("options", options);
-        return "admin/advanced";
-    }
-
-    /**
      * 保存高级选项设置
      * @return
      */
     @Route(value = "advanced", method = HttpMethod.POST)
-    public String doAdvanced(@QueryParam String cache_key, @QueryParam String block_ips, @QueryParam String plugin_name){
+    @JSON
+    public RestResponse doAdvanced(@QueryParam String cache_key, @QueryParam String block_ips,
+                                   @QueryParam String plugin_name, @QueryParam String rewrite_url,
+                                   @QueryParam String allow_install){
         // 清除缓存
         if(StringKit.isNotBlank(cache_key)){
             if(cache_key.equals("*")){
@@ -264,29 +241,46 @@ public class IndexController extends BaseController {
             }
             optionsService.deleteOption(key);
         }
-        return "admin/advanced";
-    }
-    
-  /**
-   * 重启系统
-   * @param sleep
-   * @return
-   */
-  @Route(value = "reload", method = HttpMethod.GET)
-  public void reload(@QueryParam(value = "sleep", defaultValue = "0") int sleep, Request request){
-      if(sleep < 0 || sleep > 999){
-          sleep = 10;
-      }
-      try {
-          String webHome = new File(AttachController.CLASSPATH).getParent();
-          String cmd = "sh " + webHome + "restart.sh ";
-          LOGGER.info("execute shell: {}", cmd);
-          ShellUtils.shell(cmd);
-          logService.save(LogActions.RELOAD_SYS, "", request.address(), this.getUid());
-          TimeUnit.SECONDS.sleep(sleep);
-      } catch (Exception e){
-          LOGGER.error("重启系统失败", e);
-      }
-  }
+        // 是否允许重新安装
+        if(StringKit.isNotBlank(allow_install)){
+            optionsService.saveOption("allow_install", allow_install);
+            TaleConst.OPTIONS.asMap().put("allow_install", allow_install);
+        }
 
+        String db_rewrite = TaleConst.OPTIONS.get("rewrite_url", "");
+        if(db_rewrite.length() > 0){
+            Blade.$().delRoute("/:pagename" + rewrite_url);
+            Blade.$().routeMatcher().update();
+        }
+
+        if(StringKit.isBlank(rewrite_url)){
+            Blade.$().route("/:pagename" + rewrite_url, com.tale.controller.IndexController.class, "page");
+            Blade.$().routeMatcher().update();
+        }
+
+        optionsService.saveOption("rewrite_url", rewrite_url);
+        return RestResponse.ok();
+    }
+
+    /**
+     * 重启系统
+     * @param sleep
+     * @return
+     */
+    @Route(value = "reload", method = HttpMethod.GET)
+    public void reload(@QueryParam(value = "sleep", defaultValue = "0") int sleep, Request request){
+        if(sleep < 0 || sleep > 999){
+            sleep = 10;
+        }
+        try {
+            String webHome = new File(AttachController.CLASSPATH).getParent();
+            String cmd = "sh " + webHome + "restart.sh ";
+            LOGGER.info("execute shell: {}", cmd);
+            ShellUtils.shell(cmd);
+            logService.save(LogActions.RELOAD_SYS, "", request.address(), this.getUid());
+            TimeUnit.SECONDS.sleep(sleep);
+        } catch (Exception e){
+            LOGGER.error("重启系统失败", e);
+        }
+    }
 }

@@ -78,11 +78,11 @@ public class WebContext implements BeanProcessor, WebContextListener {
         JetGlobalContext context = templateEngine.getGlobalContext();
         context.set("version", bConfig.config().get("app.version", "v1.0"));
 
-        TaleConst.MAX_FILE_SIZE = bConfig.config().getInt("app.max-file-size", 20480);
 
         ViewSettings.$().templateEngine(templateEngine);
 
-        TaleConst.AES_SALT = bConfig.config().get("app.salt", "012c456789abcdef");
+        TaleConst.MAX_FILE_SIZE = bConfig.config().getInt("app.max-file-size", 20480);
+        TaleConst.AES_SALT = bConfig.config().get("app.salt", StringKit.getRandomChar(16));
         if (dbIsOk) {
             TaleConst.OPTIONS.addAll(optionsService.getOptions());
             TaleConst.INSTALL = TaleConst.OPTIONS.getInt("site_is_install", 0) == 1;
