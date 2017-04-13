@@ -6,7 +6,6 @@ import com.tale.dto.PluginMenu;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -32,6 +31,16 @@ public class TaleConst {
      * 最大获取文章条数
      */
     public static final int MAX_POSTS = 9999;
+    
+    /**
+     * 文章最多可以输入的文字数
+     */
+    public static final int MAX_TEXT_COUNT = 200000;
+    
+    /**
+     * 文章标题最多可以输入的文字个数
+     */
+    public static final int MAX_TITLE_COUNT = 200;
 
     /**
      * 点击次数超过多少更新到数据库

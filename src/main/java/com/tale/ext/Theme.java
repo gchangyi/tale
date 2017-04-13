@@ -2,6 +2,7 @@ package com.tale.ext;
 
 import com.blade.jdbc.model.Paginator;
 import com.blade.kit.StringKit;
+import com.tale.controller.BaseController;
 import com.tale.dto.Comment;
 import com.tale.dto.MetaDto;
 import com.tale.dto.Types;
@@ -287,7 +288,7 @@ public final class Theme {
             return "";
         }
         if(StringKit.isNotBlank(contents.getThumb_img())){
-        	 return contents.getThumb_img();
+            return contents.getThumb_img();
         }
         String content = article(contents.getContent());
         String img = Commons.show_thumb(content);
@@ -317,6 +318,58 @@ public final class Theme {
     public static Contents article_prev(){
         Contents cur = current_article();
         return null != cur ? siteService.getNhContent(Types.PREV, cur.getCid()) : null;
+    }
+
+    /**
+     * 当前文章的下一篇文章链接
+     * @return
+     */
+    public static String theNext(){
+        Contents contents = article_next();
+        if(null != contents){
+            return theNext(title(contents));
+        }
+        return "";
+    }
+
+    /**
+     * 当前文章的下一篇文章链接
+     *
+     * @param title 文章标题
+     * @return
+     */
+    public static String theNext(String title){
+        Contents contents = article_next();
+        if(null != contents){
+            return "<a href=\""+ permalink(contents) +"\" title=\"" + title(contents) + "\">"+ title +"</a>";
+        }
+        return "";
+    }
+
+    /**
+     * 当前文章的下一篇文章链接
+     * @return
+     */
+    public static String thePrev(){
+        Contents contents = article_prev();
+        if(null != contents){
+            return thePrev(title(contents));
+        }
+        return "";
+    }
+
+    /**
+     * 当前文章的下一篇文章链接
+     *
+     * @param title 文章标题
+     * @return
+     */
+    public static String thePrev(String title){
+        Contents contents = article_prev();
+        if(null != contents){
+            return "<a href=\""+ permalink(contents) +"\" title=\""+ title(contents) +"\">"+ title +"</a>";
+        }
+        return "";
     }
 
     /**

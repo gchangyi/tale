@@ -10,6 +10,7 @@ import com.blade.kit.DateKit;
 import com.blade.kit.StringKit;
 import com.tale.dto.Types;
 import com.tale.exception.TipException;
+import com.tale.init.TaleConst;
 import com.tale.model.Contents;
 import com.tale.service.ContentsService;
 import com.tale.service.MetasService;
@@ -58,12 +59,12 @@ public class ContentsServiceImpl implements ContentsService {
             throw new TipException("文章标题不能为空");
         if (StringKit.isBlank(contents.getContent()))
             throw new TipException("文章内容不能为空");
-        if (contents.getTitle().length() > 200)
-            throw new TipException("文章标题过长");
-        if (contents.getContent().length() > 10000)
-            throw new TipException("文章内容过长");
+        if (contents.getTitle().length() > TaleConst.MAX_TITLE_COUNT)
+            throw new TipException("文章标题最多可以输入"+ TaleConst.MAX_TITLE_COUNT +"个字符");
+        if (contents.getContent().length() > TaleConst.MAX_TEXT_COUNT)
+            throw new TipException("文章内容最多可以输入"+ TaleConst.MAX_TEXT_COUNT +"个字符");
         if (null == contents.getAuthor_id())
-            throw new TipException("请登录后发布文章");
+            throw new TipException("请登录后再发布文章");
 
         if (StringKit.isNotBlank(contents.getSlug())) {
             if(contents.getSlug().length() < 5){
